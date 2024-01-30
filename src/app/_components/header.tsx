@@ -31,9 +31,7 @@ const Header = async () => {
                   Following
                 </Link>
               </li>
-            ) : (
-              ""
-            )}
+            ) : null}
           </ul>
           <ul className="flex items-center justify-end">
             <li className="p-2">
