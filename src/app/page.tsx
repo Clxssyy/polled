@@ -12,12 +12,16 @@ export default async function Home() {
 
   return (
     <>
-      <CreatePoll />
-      <div>
-        {polls.map((poll) => {
-          return <Poll key={poll.id} poll={poll} />;
-        })}
-      </div>
+      <main className="flex flex-col place-items-center">
+        <div className="w-1/2 p-2 flex flex-col gap-4">
+          <CreatePoll />
+          <div className="flex flex-col gap-2">
+            {polls.map((poll) => {
+              return <Poll key={poll.id} poll={poll} />;
+            })}
+          </div>
+        </div>
+      </main>
     </>
   );
 }
