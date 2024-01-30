@@ -1,6 +1,10 @@
 "use client";
 
-import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import {
+  EllipsisVerticalIcon,
+  PencilIcon,
+  TrashIcon,
+} from "@heroicons/react/24/solid";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { api } from "~/trpc/react";
@@ -12,6 +16,7 @@ const EllipsisMenu = (props: { pollId: number }) => {
   const deletePoll = api.poll.delete.useMutation({
     onSuccess: () => {
       router.refresh();
+      setShow(!show);
     },
   });
 
@@ -21,21 +26,22 @@ const EllipsisMenu = (props: { pollId: number }) => {
         <EllipsisVerticalIcon className="h-6 w-6 text-black" />
       </button>
       <div
-        className={`font-bold ${show ? "absolute right-0 rounded bg-gray-200" : "hidden"}`}
+        className={`absolute -left-10 -top-1.5 rounded border border-black bg-gray-200 font-bold transition duration-200 ${show ? "-translate-x-12" : "scale-0 opacity-0"}`}
       >
-        <ul className="flex flex-col gap-2">
+        <ul className="flex divide-x divide-black">
           <li>
-            <button className="w-full rounded p-2">Edit</button>
-          </li>
-          <li>
-            {/* Call handleDeletePoll when the Delete button is clicked */}
             <button
-              className="w-full rounded p-2"
+              className="p-2"
               onClick={() => {
                 deletePoll.mutate({ id: props.pollId });
               }}
             >
-              Delete
+              <TrashIcon className="h-6 w-6" />
+            </button>
+          </li>
+          <li>
+            <button className="p-2">
+              <PencilIcon className="h-6 w-6" />
             </button>
           </li>
         </ul>
