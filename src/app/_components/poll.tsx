@@ -14,7 +14,7 @@ const Poll = (props: { poll: Poll }) => {
           <div>
             <h1 className="text-xl font-extrabold">{props.poll.title}</h1>
             <p className="text-xs">
-              Votes: <span>{}</span>
+              Votes: <span>{props.poll.votes.length}</span>
             </p>
           </div>
           <div className="flex place-items-center">

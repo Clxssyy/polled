@@ -18,12 +18,14 @@ export const pollRouter = createTRPCRouter({
           take: input.count,
           include: {
             options: true,
+            votes: true,
           },
         });
       } else {
         polls = await ctx.db.poll.findMany({
           include: {
             options: true,
+            votes: true,
           },
         });
       }
@@ -37,6 +39,7 @@ export const pollRouter = createTRPCRouter({
         where: { id: input.id },
         include: {
           options: true,
+          votes: true,
         },
       });
     }),
