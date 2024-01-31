@@ -19,6 +19,7 @@ export const pollRouter = createTRPCRouter({
           include: {
             options: true,
             votes: true,
+            createdBy: true,
           },
         });
       } else {
@@ -26,6 +27,7 @@ export const pollRouter = createTRPCRouter({
           include: {
             options: true,
             votes: true,
+            createdBy: true,
           },
         });
       }
@@ -40,6 +42,7 @@ export const pollRouter = createTRPCRouter({
         include: {
           options: true,
           votes: true,
+          createdBy: true,
         },
       });
     }),

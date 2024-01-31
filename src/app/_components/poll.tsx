@@ -5,17 +5,29 @@ import {
 } from "@heroicons/react/24/solid";
 import { Poll, PollOption } from "@prisma/client";
 import EllipsisMenu from "./ellipsisMenu";
+import Image from "next/image";
+import Link from "next/link";
 
 const Poll = (props: { poll: Poll }) => {
   return (
     <>
       <div className="flex flex-col gap-2 rounded border border-gray-400 bg-white p-2 shadow-lg">
         <div className="flex justify-between">
-          <div>
-            <h1 className="text-xl font-extrabold">{props.poll.title}</h1>
-            <p className="text-xs">
-              Votes: <span>{props.poll.votes.length}</span>
-            </p>
+          <div className="flex gap-2">
+            <div className="flex place-items-center">
+              <Link href={"/" + props.poll.createdBy.name}>
+                <Image
+                  src={props.poll.createdBy.image}
+                  width={30}
+                  height={30}
+                  alt={props.poll.createdBy.name}
+                  className="rounded-full border border-black shadow-lg transition duration-200 hover:scale-105"
+                />
+              </Link>
+            </div>
+            <div className="flex place-items-center">
+              <h1 className="text-xl font-extrabold">{props.poll.title}</h1>
+            </div>
           </div>
           <div className="flex place-items-center">
             <EllipsisMenu pollId={props.poll.id} />
@@ -34,6 +46,11 @@ const Poll = (props: { poll: Poll }) => {
               </div>
             );
           })}
+        </div>
+        <div>
+          <p className="text-xs">
+            Votes: <span>{props.poll.votes.length}</span>
+          </p>
         </div>
         <div className="flex justify-between">
           <div className="flex place-items-center gap-2">
