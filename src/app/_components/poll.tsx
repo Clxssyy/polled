@@ -3,14 +3,27 @@ import {
   ChatBubbleBottomCenterIcon,
   HeartIcon,
 } from "@heroicons/react/24/solid";
-import { Poll, PollOption, PollVote } from "@prisma/client";
+import {
+  Poll,
+  type PollVote,
+  type PollOption,
+  type User,
+} from "@prisma/client";
 import EllipsisMenu from "./ellipsisMenu";
 import Image from "next/image";
 import Link from "next/link";
 import VoteButton from "./voteButton";
 import { getServerAuthSession } from "~/server/auth";
 
-const Poll = async (props: { poll: Poll }) => {
+interface PollProps {
+  poll: Poll & {
+    options: PollOption[];
+    votes: PollVote[];
+    createdBy: User;
+  };
+}
+
+const Poll = async (props: PollProps) => {
   const session = await getServerAuthSession();
 
   return (
@@ -21,10 +34,10 @@ const Poll = async (props: { poll: Poll }) => {
             <div className="flex place-items-center">
               <Link href={"/" + props.poll.createdBy.name}>
                 <Image
-                  src={props.poll.createdBy.image}
                   width={30}
                   height={30}
-                  alt={props.poll.createdBy.name}
+                  src={props.poll.createdBy.image ?? "/default-avatar.png"}
+                  alt={props.poll.createdBy.name ?? "User"}
                   className="rounded-full border border-black shadow-lg transition duration-200 hover:scale-105"
                 />
               </Link>
