@@ -93,6 +93,24 @@ export const pollRouter = createTRPCRouter({
     .mutation(async ({ ctx, input }) => {
       const { id } = input;
 
+      const poll = await ctx.db.poll.findFirst({
+        where: { id },
+        include: { createdBy: true },
+      });
+
+      if (!poll) {
+        throw new Error("Poll not found");
+      }
+
+      if (!(ctx.session.user.id === poll?.createdBy.id)) {
+        throw new Error("Not authorized");
+      }
+
+      // Delete votes associated with the poll
+      await ctx.db.pollVote.deleteMany({
+        where: { poll: { id } },
+      });
+
       // Delete options associated with the poll
       await ctx.db.pollOption.deleteMany({
         where: { poll: { id } },
@@ -103,5 +121,69 @@ export const pollRouter = createTRPCRouter({
       });
 
       return { success: true };
+    }),
+
+  vote: protectedProcedure
+    .input(z.object({ pollId: z.number(), optionId: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const { pollId, optionId } = input;
+
+      // Check if the user has already voted
+      const existingVote = await ctx.db.pollVote.findFirst({
+        where: {
+          poll: { id: pollId },
+          user: { id: ctx.session.user.id },
+        },
+      });
+
+      if (existingVote) {
+        throw new Error("Already voted");
+      }
+
+      const poll = await ctx.db.poll.findFirst({
+        where: { id: pollId },
+        include: { options: true },
+      });
+
+      if (!poll) {
+        throw new Error("Poll not found");
+      }
+
+      if (poll.createdById === ctx.session.user.id) {
+        throw new Error("Cannot vote on your own poll");
+      }
+
+      const option = poll.options.find((o) => o.id === optionId);
+
+      if (!option) {
+        throw new Error("Option not found");
+      }
+
+      const vote = await ctx.db.pollVote.create({
+        data: {
+          pollOption: { connect: { id: optionId } },
+          poll: { connect: { id: pollId } },
+          user: { connect: { id: ctx.session.user.id } },
+        },
+      });
+
+      return vote;
+    }),
+
+  getVotes: protectedProcedure
+    .input(z.object({ pollId: z.number() }))
+    .query(async ({ ctx, input }) => {
+      const { pollId } = input;
+
+      const poll = await ctx.db.poll.findFirst({
+        where: { id: pollId },
+        include: { votes: true },
+      });
+
+      if (!poll) {
+        throw new Error("Poll not found");
+      }
+
+      return poll.votes;
     }),
 });

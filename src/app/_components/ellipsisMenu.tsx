@@ -18,6 +18,10 @@ const EllipsisMenu = (props: { pollId: number }) => {
       router.refresh();
       setShow(!show);
     },
+    onError: (error) => {
+      router.refresh();
+      setShow(!show);
+    },
   });
 
   return (

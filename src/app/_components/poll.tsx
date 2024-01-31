@@ -3,12 +3,16 @@ import {
   ChatBubbleBottomCenterIcon,
   HeartIcon,
 } from "@heroicons/react/24/solid";
-import { Poll, PollOption } from "@prisma/client";
+import { Poll, PollOption, PollVote } from "@prisma/client";
 import EllipsisMenu from "./ellipsisMenu";
 import Image from "next/image";
 import Link from "next/link";
+import VoteButton from "./voteButton";
+import { getServerAuthSession } from "~/server/auth";
 
-const Poll = (props: { poll: Poll }) => {
+const Poll = async (props: { poll: Poll }) => {
+  const session = await getServerAuthSession();
+
   return (
     <>
       <div className="flex flex-col gap-2 rounded border border-gray-400 bg-white p-2 shadow-lg">
@@ -34,23 +38,22 @@ const Poll = (props: { poll: Poll }) => {
           </div>
         </div>
         <div className="flex flex-col gap-1">
-          {props.poll.options.map((option: PollOption) => {
+          {props.poll.options.map((pollOption: PollOption) => {
             return (
-              <div
-                className="rounded border border-black hover:bg-gray-100"
-                key={option.id}
-              >
-                <button className="h-full w-full rounded p-2">
-                  {option.title}
-                </button>
-              </div>
+              <VoteButton
+                key={pollOption.id}
+                option={pollOption}
+                session={session}
+                poll={props.poll}
+              />
             );
           })}
         </div>
-        <div>
+        <div className="flex justify-between">
           <p className="text-xs">
             Votes: <span>{props.poll.votes.length}</span>
           </p>
+          <p className="text-xs">Results</p>
         </div>
         <div className="flex justify-between">
           <div className="flex place-items-center gap-2">
