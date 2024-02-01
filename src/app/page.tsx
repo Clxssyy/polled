@@ -8,7 +8,7 @@ import Poll from "./_components/poll";
 export default async function Home() {
   noStore();
   const session = await getServerAuthSession();
-  const polls = await api.poll.getMany.query();
+  const polls = await api.poll.getMany.query({});
 
   return (
     <>

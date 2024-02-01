@@ -32,7 +32,7 @@ const Poll = async (props: PollProps) => {
         <div className="flex justify-between">
           <div className="flex gap-2">
             <div className="flex place-items-center">
-              <Link href={"/" + props.poll.createdBy.name}>
+              <Link href={"/user/" + props.poll.createdBy.name}>
                 <Image
                   width={30}
                   height={30}

@@ -8,14 +8,30 @@ import {
 
 export const pollRouter = createTRPCRouter({
   getMany: publicProcedure
-    .input(z.object({ count: z.number().optional() }).optional())
+    .input(
+      z.object({
+        count: z.number().optional(),
+        userId: z.string().optional(),
+      }),
+    )
     .query(async ({ ctx, input }) => {
+      const { count, userId } = input ?? {};
       let polls;
 
-      if (input) {
+      if (count) {
         // Get a specific number of polls
         polls = await ctx.db.poll.findMany({
-          take: input.count,
+          take: count,
+          include: {
+            options: true,
+            votes: true,
+            createdBy: true,
+          },
+        });
+      } else if (userId) {
+        // Get polls created by a specific user
+        polls = await ctx.db.poll.findMany({
+          where: { createdById: userId },
           include: {
             options: true,
             votes: true,
