@@ -11,11 +11,15 @@ const Page = async ({ params }: { params: { id: string } }) => {
     const polls = await api.poll.getMany.query({ userId: user.id });
 
     return (
-      <>
-        {polls.map((poll) => {
-          return <Poll key={poll.id} poll={poll} />;
-        })}
-      </>
+      <main className="flex flex-col place-items-center">
+        <div className="flex w-1/2 flex-col gap-4 p-2">
+          <div className="flex flex-col gap-2">
+            {polls.map((poll) => {
+              return <Poll key={poll.id} poll={poll} />;
+            })}
+          </div>
+        </div>
+      </main>
     );
   } else {
     return (
