@@ -39,7 +39,7 @@ const VoteButton = (props: {
           key={props.option.id}
         >
           <div
-            className={`h-full w-[${(optionVotes / props.poll.votes.length) * 100}%] rounded ${votedOption ? "bg-green-300" : "bg-black/30"} p-2`}
+            className={`h-full truncate w-[${(optionVotes / props.poll.votes.length) * 100}%] rounded ${votedOption ? "bg-green-300" : "bg-black/30"} p-2`}
           >
             {props.option.title}
           </div>
@@ -54,7 +54,7 @@ const VoteButton = (props: {
           key={props.option.id}
         >
           <button
-            className="h-full w-full rounded p-2"
+            className="h-full w-full truncate rounded p-2"
             onClick={() => {
               votePoll.mutate({
                 pollId: props.option.pollId,
