@@ -29,24 +29,22 @@ const Poll = async (props: PollProps) => {
   return (
     <>
       <div className="flex flex-col gap-2 rounded border border-gray-400 bg-white p-2 shadow-lg">
-        <div className="flex">
-          <div className="flex grow gap-2 overflow-hidden">
-            <div className="flex place-items-center">
-              <Link href={"/user/" + props.poll.createdBy.name}>
-                <Image
-                  width={30}
-                  height={30}
-                  src={props.poll.createdBy.image ?? "/default-avatar.png"}
-                  alt={props.poll.createdBy.name ?? "User"}
-                  className="rounded-full border border-black shadow-lg transition duration-200 hover:scale-105"
-                />
-              </Link>
-            </div>
-            <div className="flex grow place-items-center overflow-hidden">
-              <h1 className="truncate text-xl font-extrabold">
-                {props.poll.title}
-              </h1>
-            </div>
+        <div className="flex w-full gap-2">
+          <div className="flex place-items-center">
+            <Link href={"/user/" + props.poll.createdBy.name}>
+              <Image
+                width={128}
+                height={128}
+                src={props.poll.createdBy.image ?? "/default-avatar.png"}
+                alt={props.poll.createdBy.name ?? "User"}
+                className="h-6 w-6 rounded-full border border-black shadow-lg transition duration-200 hover:scale-105"
+              />
+            </Link>
+          </div>
+          <div className="flex grow place-items-center overflow-hidden">
+            <h1 className="truncate text-xl font-extrabold">
+              {props.poll.title}
+            </h1>
           </div>
           <div className="flex place-items-center">
             <EllipsisMenu pollId={props.poll.id} />
